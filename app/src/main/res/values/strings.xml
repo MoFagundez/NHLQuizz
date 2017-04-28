@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">NHL Quizz</string>
+    <string name="answer_correct">Correct!</string>
+    <string name="answer_wrong">Try again!</string>
+</resources>
