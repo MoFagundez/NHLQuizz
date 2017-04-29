@@ -23,13 +23,12 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
-import java.util.Timer;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
-    Quiz[] quizList;
+    List<Question> questionList;
     ListView answersListView;
     String userAnswer;
     String correctAnswer;
@@ -39,10 +38,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        startGame(R.string.game_start);
+    }
 
+    /**
+     *  Documentation pending...
+     */
+    private void startGame(int message) {
         new AlertDialog.Builder(MainActivity.this)
-                .setTitle("NHL Quizz")
-                .setMessage("Game is about to start! You have 30 seconds to yadda yadda bla bla bla ooga booga oggy ogelthorpe! Are you ready?")
+                .setTitle(R.string.app_name)
+                .setMessage(message)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //  Initialise quiz database: see method documentation
@@ -60,63 +65,75 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     *  The addQuizDatabase method is a void type method that create Quiz objects
+     *  The addQuizDatabase method is a void type method that create Question objects
      *  to be populated on the screen. Ideally this method should pull data from
-     *  an SQLite database or RESTful API.
+     *  an SQLite database, JSON or RESTful API.
      *
-     *  For this project, I am manually creating the questions since it does not
+     *  For this project, I am manually initiating the objects since it does not
      *  require any of the storage methods above mentioned.
     * */
     public void addQuizDatabase() {
-        //  The code below creates as many Quiz objects as we need for the app
-        Quiz quiz0 = new Quiz(0, "Who let the dogs out?", "Yes1", "NOT ME!", "WOOF WOOF!", "WOOF!");
-        Quiz quiz1 = new Quiz(1, "Who let the dogs out?", "Yes2", "NOT ME!", "WOOF WOOF!", "WOOF!");
-        Quiz quiz2 = new Quiz(2, "Who let the dogs out?", "Yes3", "NOT ME!", "WOOF WOOF!", "WOOF!");
-        Quiz quiz3 = new Quiz(3, "Who let the dogs out?", "Yes4", "NOT ME!", "WOOF WOOF!", "WOOF!");
-        Quiz quiz4 = new Quiz(4, "Who let the dogs out?", "Yes5", "NOT ME!", "WOOF WOOF!", "WOOF!");
-        Quiz quiz5 = new Quiz(5, "Who let the dogs out?", "Yes6", "NOT ME!", "WOOF WOOF!", "WOOF!");
-        Quiz quiz6 = new Quiz(6, "Who let the dogs out?", "Yes7", "NOT ME!", "WOOF WOOF!", "WOOF!");
-        Quiz quiz7 = new Quiz(7, "Who let the dogs out?", "Yes8", "NOT ME!", "WOOF WOOF!", "WOOF!");
-        Quiz quiz8 = new Quiz(8, "Who let the dogs out?", "Yes9", "NOT ME!", "WOOF WOOF!", "WOOF!");
-        Quiz quiz9 = new Quiz(9, "Who let the dogs out?", "Yes10", "NOT ME!", "WOOF WOOF!", "WOOF!");
+        //  The code below initiates as many Question objects as we need for the app
+        Question question0 = new Question("E ai coleh que eh?");
+        question0.addAnswer("Fogo na bomba", true);
+        question0.addAnswer("Cara de bunda", false);
+        question0.addAnswer("Feia jagunca", false);
+        question0.addAnswer("Serviu a carapuca", false);
 
-        //  Puts all Quiz objects into a list (global variable quizList)
-        quizList = new Quiz[]{quiz0, quiz1, quiz2, quiz3, quiz4, quiz5, quiz6, quiz7, quiz8, quiz9};
+        Question question1 = new Question("Quem eh Tripa Seca?");
+        question1.addAnswer("Seu Madruga", true);
+        question1.addAnswer("Veia da verruga", false);
+        question1.addAnswer("Na bunda urtiga", false);
+        question1.addAnswer("Fera ferida", false);
+
+        Question question2 = new Question("Qual Leonardo eh o famoso inventor da palavra 'bundapum'?");
+        question2.addAnswer("Fagundes", true);
+        question2.addAnswer("Da Vinci", false);
+        question2.addAnswer("Di Caprio", false);
+        question2.addAnswer("O irmao do Leandro", false);
+
+        Question question3 = new Question("Com quantos paus se faz uma canoa?");
+        question3.addAnswer("Depende do tamanho", true);
+        question3.addAnswer("Hoje em dia de fibra", false);
+        question3.addAnswer("Quatorze ou Catorze?", false);
+        question3.addAnswer("A canoa virou...", false);
+
+        Question question4 = new Question("Quem bateu no pirulito que bate-bate?");
+        question4.addAnswer("Ela, que gosta de mim", true);
+        question4.addAnswer("A torcida do Corinthians", false);
+        question4.addAnswer("Rocky Balboa", false);
+        question4.addAnswer("A mae dele pois ele eh sapeca", false);
+
+        questionList = new ArrayList<>(Arrays.asList(question0, question1, question2, question3, question4));
+
     }
 
     /**
      *  The generateNewQuestion method generates a random number between 0 and the length of the
-     *  variable quizList. This random number will be used to pick a Quiz object from quizArrayList
+     *  variable questionList. This random number will be used to pick a Quiz object from quizArrayList
      *  (defined below) in order to populate the user's screen.
      *
      *  This method also populates the user screen.
      */
     public void generateNewQuestion() {
-        //  Generate a random number between 0 and the number of Quiz objects to randomly collect a Quiz object from the "database" (quizList)
+        //  Generate a random number between 0 and the number of Quiz objects to randomly collect a Quiz object from the "database" (questionList)
         Random random = new Random();
-        int position = random.nextInt(quizList.length);
-
-        //  Pass the correct answer to a String variable to check correct answer later
-        correctAnswer = quizList[position].getAnswerCorrect();
-
-        //  Pass all answers to an ArrayList
-        final ArrayList<String> answersArrayList = new ArrayList<>(Arrays.asList(quizList[position].getAnswerCorrect(),quizList[position].getAnswerWrong1(),
-                quizList[position].getAnswerWrong2(),quizList[position].getAnswerWrong3()));
+        int position = random.nextInt(questionList.size());
 
         //  Create an ArrayList that will be used to inflate the LisView (used with ArrayAdapter)
-        final ArrayList<String> listViewArrayList = new ArrayList<String>();
+        final ArrayList<Answer> listViewArrayList = new ArrayList<>();
 
         //  Transfer answers from answersArrayList to listViewArrayList in random positions
         for (int i = 0; i < 4; i++) {
-            int j = random.nextInt(answersArrayList.size());
-            listViewArrayList.add(answersArrayList.get(j));
-            answersArrayList.remove(j);
+            int j = random.nextInt(questionList.get(position).answers.size());
+            listViewArrayList.add(questionList.get(position).answers.get(j));
+            questionList.get(position).answers.remove(j);
         }
 
         //  Create and inflate a ListView on the screen
         answersListView = (ListView) findViewById(R.id.answersListView);
         TextView questionTextView = (TextView) findViewById(R.id.questionTextView);
-        questionTextView.setText(quizList[position].getQuestion());
+        questionTextView.setText(questionList.get(position).getQuestion());
         final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listViewArrayList);
         answersListView.setAdapter(adapter);
 
@@ -124,9 +141,7 @@ public class MainActivity extends AppCompatActivity {
         answersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //  Pass selected String value to userAnswer and call method checkCorrectAnswer
-                userAnswer = (String) parent.getItemAtPosition(position);
-                checkCorrectAnswer();
+                //checkCorrectAnswer();
             }
         });
     }
@@ -147,10 +162,13 @@ public class MainActivity extends AppCompatActivity {
         generateNewQuestion();
     }
 
+    /**
+     *  Documentation pending...
+     */
     public void startCountDown() {
         final TextView timerTextView = (TextView) findViewById(R.id.timerTextView);
 
-        new CountDownTimer(30000,1000 - 500) {
+        new CountDownTimer(5000,1000 - 500) {
 
             public void onTick(long millisUntilFinished) {
                 timerTextView.setText(((millisUntilFinished / 1000) + 1)  + " seconds remaining");
@@ -158,8 +176,8 @@ public class MainActivity extends AppCompatActivity {
 
             public void onFinish() {
                 // Do something
-                Toast.makeText(MainActivity.this, "Time up!", Toast.LENGTH_SHORT).show();
                 timerTextView.setText("0 seconds remaining");
+                startGame(R.string.game_restart_suffix);
             }
         }.start();
     }
