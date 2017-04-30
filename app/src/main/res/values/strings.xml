@@ -2,8 +2,7 @@
     <string name="app_name">NHL Quizz</string>
     <string name="answer_correct">Correct!</string>
     <string name="answer_wrong">Try again!</string>
-    <string name="game_start">Game is about to start! You have 30 seconds to yadda yadda bla bla bla ooga booga oggy ogelthorpe! Are you ready?</string>
-    <string name="game_restart_suffix"> Do you want to play again?</string>
-    <string name="game_restart_prefix">Your score is </string>
+    <string name="game_start">Game is about to start! Are you ready?</string>
+    <string name="answer_hint">Type your answer here</string>
 
 </resources>

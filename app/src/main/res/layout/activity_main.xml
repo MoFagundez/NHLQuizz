@@ -1,31 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
     android:orientation="vertical"
     tools:context="com.modashmo.nhlquizz.MainActivity">
 
-    <TextView
-        android:id="@+id/timerTextView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:textSize="@dimen/timer_font_size"
-        android:layout_height="wrap_content"/>
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/questionTextView"
-        android:textSize="@dimen/question_font_size"
+        <TextView
+            android:id="@+id/timerTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/timer_font_size" />
+
+        <TextView
+            android:id="@+id/questionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/question_font_size" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_answers"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="0dp"
+        android:layout_weight="4">
 
-    <ListView
-        android:id="@+id/answersListView"
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:divider="@color/colorPrimaryDark"
-        android:layout_height="wrap_content"/>
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="vertical">
 
+        <Button
+            android:id="@+id/button_check_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="submitAnswer"
+            android:text="Button" />
 
+        <TextView
+            android:id="@+id/user_score_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 </LinearLayout>
