@@ -250,28 +250,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * The correctAnswer method updates userScore, sets a new image into imageIcon
-     * and displays userScore in a Toast message.
+     * The correctAnswer method updates userScore and displays userScore in a Toast message.
      * <p>
      * It also restarts the game by generating a new question (generateNewQuestion)
      */
     public void correctAnswer() {
         userScore++;
-        ImageView imageIcon = (ImageView) findViewById(R.id.image_icon);
-        imageIcon.setImageResource(R.drawable.correct);
         Toast.makeText(this, "Correct! Your score is: " + String.valueOf(userScore), Toast.LENGTH_SHORT).show();
         generateNewQuestion();
     }
 
     /**
-     * The incorrectAnswer method does not update userScore, sets a new image into imageIcon
-     * and displays userScore in a Toast message.
+     * The incorrectAnswer method does not update userScore and displays userScore in a Toast message.
      * <p>
      * It also restarts the game by generating a new question (generateNewQuestion)
      */
     public void incorrectAnswer() {
-        ImageView imageIcon = (ImageView) findViewById(R.id.image_icon);
-        imageIcon.setImageResource(R.drawable.incorrect);
         Toast.makeText(this, "Try again! Your score is: " + String.valueOf(userScore), Toast.LENGTH_SHORT).show();
         generateNewQuestion();
     }
