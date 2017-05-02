@@ -13,10 +13,10 @@
 
         <LinearLayout
             android:id="@+id/layout_top"
-            android:layout_marginBottom="@dimen/standard_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_marginBottom="@dimen/standard_margin"
             android:orientation="vertical">
 
             <TextView
@@ -30,13 +30,13 @@
 
         <LinearLayout
             android:id="@+id/layout_answers"
-            android:layout_marginBottom="@dimen/standard_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/layout_top"
+            android:layout_marginBottom="@dimen/standard_margin"
             android:background="@color/colorBackground"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:padding="@dimen/narrow_margin">
 
         </LinearLayout>
 

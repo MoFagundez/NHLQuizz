@@ -2,7 +2,6 @@
 <resources>
     <dimen name="question_font_size">24sp</dimen>
     <dimen name="standard_margin">16dp</dimen>
-    <dimen name="icon_size">48dp</dimen>
+    <dimen name="narrow_margin">8dp</dimen>
     <dimen name="button_height">48dp</dimen>
-    <dimen name="zero_height">0dp</dimen>
 </resources>
