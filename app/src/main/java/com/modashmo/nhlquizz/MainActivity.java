@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             answerArrayList.add(currentQuestion.answers.get(i));
         }
         //  Show question on user screen with a TextView
-        TextView questionTextView = (TextView) findViewById(R.id.questionTextView);
+        TextView questionTextView = (TextView) findViewById(R.id.question_text_view);
         questionTextView.setText(currentQuestion.getQuestion());
         //  Shuffle answerArrayList positions
         Collections.shuffle(answerArrayList);
@@ -188,10 +189,9 @@ public class MainActivity extends AppCompatActivity {
                 answerArrayList.get(1).isCorrect == checkBoxesAnswers[1].isChecked() &&
                 answerArrayList.get(2).isCorrect == checkBoxesAnswers[2].isChecked() &&
                 answerArrayList.get(3).isCorrect == checkBoxesAnswers[3].isChecked()) {
-            Toast.makeText(this, "Correct!!", Toast.LENGTH_SHORT).show();
-            userScore++;
+            correctAnswer();
         } else {
-            Toast.makeText(this, "Try Again!", Toast.LENGTH_SHORT).show();
+            incorrectAnswer();
         }
     }
 
@@ -203,10 +203,9 @@ public class MainActivity extends AppCompatActivity {
      */
     public void checkCorrectSingle(Answer answer) {
         if (answer.isCorrect) {
-            Toast.makeText(this, "Correct!!", Toast.LENGTH_SHORT).show();
-            userScore++;
+            correctAnswer();
         } else {
-            Toast.makeText(this, "Try again!!", Toast.LENGTH_SHORT).show();
+            incorrectAnswer();
         }
     }
 
@@ -218,10 +217,9 @@ public class MainActivity extends AppCompatActivity {
      */
     public void checkCorrectText(String answer) {
         if (answer.equals(currentQuestion.answers.get(0).toString())) {
-            Toast.makeText(this, "Correct!!", Toast.LENGTH_SHORT).show();
-            userScore++;
+            correctAnswer();
         } else {
-            Toast.makeText(this, "Try Again!", Toast.LENGTH_SHORT).show();
+            incorrectAnswer();
         }
     }
 
@@ -247,11 +245,35 @@ public class MainActivity extends AppCompatActivity {
             case 3:
                 String userTextAnswer = editTextAnswer.getText().toString();
                 checkCorrectText(userTextAnswer);
-                generateNewQuestion();
                 break;
         }
-        TextView userScoreText = (TextView) findViewById(R.id.user_score_text);
-        userScoreText.setText("Score: " + userScore);
+    }
+
+    /**
+     * The correctAnswer method updates userScore, sets a new image into imageIcon
+     * and displays userScore in a Toast message.
+     * <p>
+     * It also restarts the game by generating a new question (generateNewQuestion)
+     */
+    public void correctAnswer() {
+        userScore++;
+        ImageView imageIcon = (ImageView) findViewById(R.id.image_icon);
+        imageIcon.setImageResource(R.drawable.correct);
+        Toast.makeText(this, "Correct! Your score is: " + String.valueOf(userScore), Toast.LENGTH_SHORT).show();
+        generateNewQuestion();
+    }
+
+    /**
+     * The incorrectAnswer method does not update userScore, sets a new image into imageIcon
+     * and displays userScore in a Toast message.
+     * <p>
+     * It also restarts the game by generating a new question (generateNewQuestion)
+     */
+    public void incorrectAnswer() {
+        ImageView imageIcon = (ImageView) findViewById(R.id.image_icon);
+        imageIcon.setImageResource(R.drawable.incorrect);
+        Toast.makeText(this, "Try again! Your score is: " + String.valueOf(userScore), Toast.LENGTH_SHORT).show();
+        generateNewQuestion();
     }
 
     /**
@@ -303,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
 
         Question question6 = new Question("Which of these teams has Bobby Orr NOT played?", (byte) 1);
         question6.addAnswer("Boston Bruins", false);
-        question6.addAnswer("Chicago Blackhaw", false);
+        question6.addAnswer("Chicago Blackhawks", false);
         question6.addAnswer("San Jose Sharks", true);
         question6.addAnswer("Nordiques de Quebec", true);
 

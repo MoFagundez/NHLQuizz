@@ -1,58 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
-    android:orientation="vertical"
+    android:fillViewport="true"
     tools:context="com.modashmo.nhlquizz.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/timerTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/timer_font_size" />
-
-        <TextView
-            android:id="@+id/questionTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/question_font_size" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_answers"
+        android:layout_height="@dimen/zero_height"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4">
+        android:padding="@dimen/standard_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/zero_height"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/question_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="@dimen/question_font_size" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_answers"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/zero_height"
+            android:layout_weight="4"
+            android:background="@color/colorBackground"
+            android:orientation="vertical"
+            android:padding="@dimen/standard_margin">
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/zero_height"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image_icon"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:layout_centerInParent="true"
+                android:layout_margin="@dimen/standard_margin"
+                android:scaleType="centerCrop"
+                android:src="@drawable/nhl" />
+
+            <Button
+                android:id="@+id/button_check_answer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@id/image_icon"
+                android:onClick="submitAnswer"
+                android:text="@string/button_submit" />
+
+        </RelativeLayout>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/button_check_answer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="submitAnswer"
-            android:text="Button" />
-
-        <TextView
-            android:id="@+id/user_score_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-</LinearLayout>
+</ScrollView>
