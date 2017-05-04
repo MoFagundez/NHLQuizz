@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -31,19 +32,47 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    List<Question> questionList;        //  List that holds Question instances (database)
-    Question currentQuestion;           //  Instance of Question shown on screen and being worked by the app
-    List<Answer> answerArrayList;       //  List that holds all Answer to currentQuestion
-    Answer userAnswer;                  //  Answer chosen by the user, from answerArrayList
-    CheckBox[] checkBoxesAnswers;       //  List that holds all CheckBox to populate the screen when questionType is Multiple Answers
-    EditText editTextAnswer;            //  EditText to populate screen when questionType is Text Answers
-    int userScore = 0;                  //  User score starting at zero, hardcoded :(
+    private List<Question> questionList;        //  List that holds Question instances (database)
+    private Question currentQuestion;           //  Instance of Question shown on screen and being worked by the app
+    private List<Answer> answerArrayList;       //  List that holds all Answer to currentQuestion
+    private Answer userAnswer;                  //  Answer chosen by the user, from answerArrayList
+    private CheckBox[] checkBoxesAnswers;       //  List that holds all CheckBox to populate the screen when questionType is Multiple Answers
+    private EditText editTextAnswer;            //  EditText to populate screen when questionType is Text Answers
+    private int userScore = 0;                  //  User score starting at zero, hardcoded :(
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         startGame(R.string.game_start);
+
+        /*
+         * Event listener that checks whether or not the answer is correct, updating the score
+         * afterwards (if necessary) and always calling generateNewQuestion on user's screen
+         */
+        Button buttonCheckAnswer = (Button) findViewById(R.id.button_check_answer);
+        buttonCheckAnswer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (checkQuestionType(currentQuestion)) {
+                    case 1:
+                        checkCorrectMultiple();
+                        generateNewQuestion();
+                        break;
+                    case 2:
+                        if (userAnswer != null) {
+                            checkCorrectSingle(userAnswer);
+                            generateNewQuestion();
+                        } else
+                            Toast.makeText(MainActivity.this, "Please make a selection", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 3:
+                        String userTextAnswer = editTextAnswer.getText().toString();
+                        checkCorrectText(userTextAnswer);
+                        break;
+                }
+            }
+        });
     }
 
     /**
@@ -86,8 +115,8 @@ public class MainActivity extends AppCompatActivity {
         currentQuestion = questionList.get(position);
         //  Declare and initialise an ArrayList of Answer and transfer all Answer instances from currentQuestion
         answerArrayList = new ArrayList<>();
-        for (int i = 0; i < currentQuestion.answers.size(); i++) {
-            answerArrayList.add(currentQuestion.answers.get(i));
+        for (int i = 0; i < currentQuestion.getAnswersList().size(); i++) {
+            answerArrayList.add(currentQuestion.getAnswersList().get(i));
         }
         //  Show question on user screen with a TextView
         TextView questionTextView = (TextView) findViewById(R.id.question_text_view);
@@ -115,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
      * @param question: Instance of Question class previously initialised
      */
     public byte checkQuestionType(Question question) {
-        return question.questionType;
+        return question.getQuestionType();
     }
 
     /**
@@ -129,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         //  Dynamically create CheckBox according to the number of Answer and populates them accordingly
         for (int i = 0; i < checkBoxesAnswers.length; i++) {
             checkBoxesAnswers[i] = new CheckBox(MainActivity.this);
-            checkBoxesAnswers[i].setText(answerArrayList.get(i).answer);
+            checkBoxesAnswers[i].setText(answerArrayList.get(i).getAnswer());
             layoutAnswers.addView(checkBoxesAnswers[i]);
         }
     }
@@ -148,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < answerArrayList.size(); i++) {
             radioButtonsAnswers[i] = new RadioButton(MainActivity.this);
             radioGroup.addView(radioButtonsAnswers[i]);
-            radioButtonsAnswers[i].setText(answerArrayList.get(i).answer);
+            radioButtonsAnswers[i].setText(answerArrayList.get(i).getAnswer());
         }
         //  OnCheckedChangeListener will listen to user's selection and pass the correct Answer as
         //  value to variable userAnswer
@@ -184,10 +213,10 @@ public class MainActivity extends AppCompatActivity {
      * answers by comparing the boolean values between {@link CheckBox} and answerArrayList
      */
     public void checkCorrectMultiple() {
-        if (answerArrayList.get(0).isCorrect == checkBoxesAnswers[0].isChecked() &&
-                answerArrayList.get(1).isCorrect == checkBoxesAnswers[1].isChecked() &&
-                answerArrayList.get(2).isCorrect == checkBoxesAnswers[2].isChecked() &&
-                answerArrayList.get(3).isCorrect == checkBoxesAnswers[3].isChecked()) {
+        if (answerArrayList.get(0).isCorrect() == checkBoxesAnswers[0].isChecked() &&
+                answerArrayList.get(1).isCorrect() == checkBoxesAnswers[1].isChecked() &&
+                answerArrayList.get(2).isCorrect() == checkBoxesAnswers[2].isChecked() &&
+                answerArrayList.get(3).isCorrect() == checkBoxesAnswers[3].isChecked()) {
             correctAnswer();
         } else {
             incorrectAnswer();
@@ -201,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
      * @param answer: Passed from {@link RadioGroup} according to user's {@link RadioButton} input
      */
     public void checkCorrectSingle(Answer answer) {
-        if (answer.isCorrect) {
+        if (answer.isCorrect()) {
             correctAnswer();
         } else {
             incorrectAnswer();
@@ -215,36 +244,10 @@ public class MainActivity extends AppCompatActivity {
      * @param answer: Passed from {@link EditText} according to user's text input
      */
     public void checkCorrectText(String answer) {
-        if (answer.equals(currentQuestion.answers.get(0).toString())) {
+        if (answer.equals(currentQuestion.getAnswersList().get(0).toString())) {
             correctAnswer();
         } else {
             incorrectAnswer();
-        }
-    }
-
-    /**
-     * Method submitAnswer checks whether or not the answer is correct, updating the score
-     * afterwards (if necessary) and always calling generateNewQuestion on user's screen
-     *
-     * @param view: Basically the {@link android.widget.Button} handling clicks
-     */
-    public void submitAnswer(View view) {
-        switch (checkQuestionType(currentQuestion)) {
-            case 1:
-                checkCorrectMultiple();
-                generateNewQuestion();
-                break;
-            case 2:
-                if (userAnswer != null) {
-                    checkCorrectSingle(userAnswer);
-                    generateNewQuestion();
-                } else
-                    Toast.makeText(this, "Please make a selection", Toast.LENGTH_SHORT).show();
-                break;
-            case 3:
-                String userTextAnswer = editTextAnswer.getText().toString();
-                checkCorrectText(userTextAnswer);
-                break;
         }
     }
 

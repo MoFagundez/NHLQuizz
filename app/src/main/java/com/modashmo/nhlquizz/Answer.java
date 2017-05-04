@@ -9,8 +9,8 @@ package com.modashmo.nhlquizz;
 
 public class Answer {
 
-    String answer;
-    boolean isCorrect;
+    private String answer;
+    private boolean isCorrect;
 
     //  Empty constructor
     public Answer() {
@@ -25,6 +25,14 @@ public class Answer {
     public Answer(String answer, boolean isCorrect) {
         this.answer = answer;
         this.isCorrect = isCorrect;
+    }
+
+    public boolean isCorrect() {
+        return this.isCorrect;
+    }
+
+    public String getAnswer() {
+        return this.answer;
     }
 
     /**

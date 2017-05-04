@@ -12,9 +12,9 @@ import java.util.List;
 
 public class Question {
 
-    String question;            //  Question to be shown as a TextView to the user
-    List<Answer> answers;       //  List of instances of Answer that will hold text and boolean values
-    byte questionType;          //  1 = Multiple right answers; 2 = single right answer; 3 = Text entry answer
+    private String question;            //  Question to be shown as a TextView to the user
+    private List<Answer> answers;       //  List of instances of Answer that will hold text and boolean values
+    private byte questionType;          //  1 = Multiple right answers; 2 = single right answer; 3 = Text entry answer
 
     //  Empty constructor
     public Question() {
@@ -29,6 +29,14 @@ public class Question {
         this.question = question;
         this.answers = new ArrayList<>();
         this.questionType = questionType;
+    }
+
+    public List<Answer> getAnswersList() {
+        return this.answers;
+    }
+
+    public byte getQuestionType() {
+        return this.questionType;
     }
 
     /**

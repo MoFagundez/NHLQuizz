@@ -52,7 +52,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_height"
                 android:layout_alignParentBottom="true"
-                android:onClick="submitAnswer"
                 android:text="@string/button_submit" />
 
         </RelativeLayout>
